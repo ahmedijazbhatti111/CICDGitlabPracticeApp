@@ -19,7 +19,7 @@ before_script:
 
   #Setting up the environment variable
   - export ANDROID_HOME=$PWD/android-sdk-linux
-  - export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
+  - export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
   - chmod +x ./gradlew #set executable permission
 
   # temporarily disable checking for EPIPE error and use yes to accept all licenses
