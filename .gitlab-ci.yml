@@ -1,4 +1,4 @@
-image: openjdk:8-jdk #Defining the Docker Image
+image: openjdk:11-jdk #Defining the Docker Image
 
 variables:
   ANDROID_COMPILE_SDK: "32" #set compile SDK version
