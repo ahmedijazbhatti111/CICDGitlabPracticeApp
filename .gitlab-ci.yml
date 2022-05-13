@@ -2,7 +2,7 @@ image: openjdk:11-jdk #Defining the Docker Image
 
 variables:
   ANDROID_COMPILE_SDK: "32" #set compile SDK version
-  ANDROID_BUILD_TOOLS: "32.0.0" #set build tool version
+  ANDROID_BUILD_TOOLS: "32.1.0-rc1" #set build tool version
   ANDROID_SDK_TOOLS:   "4333796" #set SDK tool build number you can find yous here https://developer.android.com/studio/releases/sdk-tools
 
 before_script:
