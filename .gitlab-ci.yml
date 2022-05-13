@@ -37,11 +37,7 @@ build_release_android:
     - "echo $PLAY_STORE_JSON > /PlayJson/play-store-key.json" # copy git variable value to play-store-key.json file
     - ./gradlew publishApkRelease # command to publish app on play store
   only:
-<<<<<<< HEAD
-    - master #set trigger for CICD if push or merge in master branch
-=======
     - main #set trigger for CICD if push or merge in master branch
->>>>>>> a72210063fe733e28580a193283112b4053313e0
   artifacts:
     paths:
       - ./app/build/outputs/ # set artifact path which store your APK file
