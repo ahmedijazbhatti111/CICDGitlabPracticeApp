@@ -3,7 +3,7 @@ image: openjdk:11-jdk #Defining the Docker Image
 variables:
   ANDROID_COMPILE_SDK: "32" #set compile SDK version
   ANDROID_BUILD_TOOLS: "32.1.0-rc1" #set build tool version
-  ANDROID_SDK_TOOLS: "4333796" #set SDK tool build number you can find yous here https://developer.android.com/studio/releases/sdk-tools
+  ANDROID_SDK_TOOLS:   "4333796" #set SDK tool build number you can find yous here https://developer.android.com/studio/releases/sdk-tools
 
 before_script:
   #Installing Packages
@@ -20,18 +20,6 @@ before_script:
   #Setting up the environment variable
   - export ANDROID_HOME=$PWD/android-sdk-linux
   - export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
-  # Create a new directory at specified location
-  - install -d $ANDROID_HOME
-  # Here we are installing androidSDK tools from official source,
-  # (the key thing here is the url from where you are downloading these sdk tool for command line, so please do note this url pattern there and here as well)
-  # after that unzipping those tools and
-  # then running a series of SDK manager commands to install necessary android SDK packages that'll allow the app to build
-  - wget --output-document=$ANDROID_HOME/cmdline-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_TOOLS}_latest.zip
-  # move to the archive at ANDROID_HOME
-  - pushd $ANDROID_HOME
-  - unzip -d cmdline-tools cmdline-tools.zip
-  - popd
-  - export PATH=$PATH:${ANDROID_HOME}/cmdline-tools/tools/bin/
   - chmod +x ./gradlew #set executable permission
 
   # temporarily disable checking for EPIPE error and use yes to accept all licenses
