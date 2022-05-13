@@ -36,6 +36,7 @@ build_release_android:
     - mkdir /PlayJson #make temp directory named PlayJson in root of project
     - "echo $PLAY_STORE_JSON > /PlayJson/play-store-key.json" # copy git variable value to play-store-key.json file
     - ./gradlew publishApkRelease # command to publish app on play store
+    - "echo gradlew publishApkRelease"
   only:
     - main #set trigger for CICD if push or merge in master branch
   artifacts:
