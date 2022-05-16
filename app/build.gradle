@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
     id 'com.github.triplet.play'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -45,10 +45,15 @@ android {
     }
 }
 
+//play {
+//    track = 'alpha' // set track for playstore  like 'production','beta','alpha'
+//    serviceAccountEmail = 'google-play-android-developer@pc-api-5901144735381435704-900.iam.gserviceaccount.com' //paste your service account email
+//    jsonFile = file('/PlayJson/play-store-key.json') // copy this line as it is do not modify
+//}
+
 play {
-    track = 'alpha' // set track for playstore  like 'production','beta','alpha'
-    serviceAccountEmail = 'google-play-android-developer@pc-api-5901144735381435704-900.iam.gserviceaccount.com' //paste your service account email
-    jsonFile = file('/PlayJson/play-store-key.json') // copy this line as it is do not modify
+    serviceAccountCredentials.set(file("pc-api-5901144735381435704-900-e2a645b4efce.json"))
+    track.set("alpha")
 }
 
 
