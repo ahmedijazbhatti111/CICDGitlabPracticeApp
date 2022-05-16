@@ -52,8 +52,8 @@ android {
 //}
 
 play {
-    serviceAccountCredentials.set(file("pc-api-5901144735381435704-900-e2a645b4efce.json"))
-    track.set("alpha")
+    serviceAccountCredentials = file('pc-api-5901144735381435704-900-e2a645b4efce.json')
+    track = 'alpha'
 }
 
 
