@@ -18,9 +18,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-
-
-
     signingConfigs {
         release {
             // You need to specify either an absolute path or include the
