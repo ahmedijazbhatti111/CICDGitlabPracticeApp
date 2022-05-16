@@ -60,8 +60,8 @@ stages:
 build_release_android:
   stage: build_release_android
   script:
-#    - mkdir /PlayJson #make temp directory named PlayJson in root of project
-#    - "echo $PLAY_STORE_JSON > /PlayJson/play-store-key.json" # copy git variable value to play-store-key.json file
+    - mkdir /PlayJson #make temp directory named PlayJson in root of project
+    - "echo $PLAY_STORE_JSON > /PlayJson/play-store-key.json" # copy git variable value to play-store-key.json file
     - ./gradlew publishApkRelease # command to publish app on play store
     - "echo gradlew publishApkRelease"
   only:
