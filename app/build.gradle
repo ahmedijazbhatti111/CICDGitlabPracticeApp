@@ -5,6 +5,7 @@ plugins {
 }
 
 android {
+    def signingProps = getProps('signing.properties')
     compileSdk 32
     buildToolsVersion '32.1.0-rc1'
 
@@ -20,12 +21,11 @@ android {
 
     signingConfigs {
         release {
-            // You need to specify either an absolute path or include the
-            // keystore file in the same directory as the build.gradle file.
-            storeFile file("my-release-key.jks")
-            storePassword "password"
-            keyAlias "my-alias"
-            keyPassword "password"
+
+            storeFile file(signingProps["KEYSTORE_FILE"])
+            storePassword signingProps["KEYSTORE_PASSWORD"]
+            keyAlias signingProps["KEY_ALIAS"]
+            keyPassword signingProps["KEY_PASSWORD"]
         }
     }
 
@@ -45,20 +45,12 @@ android {
     }
 }
 
-//play {
-//    track = 'alpha' // set track for playstore  like 'production','beta','alpha'
-//    serviceAccountEmail = 'google-play-android-developer@pc-api-5901144735381435704-900.iam.gserviceaccount.com' //paste your service account email
-//    jsonFile = file('/PlayJson/play-store-key.json') // copy this line as it is do not modify
-//}
-
 play {
     serviceAccountCredentials = file('pc-api-5901144735381435704-900-e2a645b4efce.json')
     track = 'alpha'
 }
 
-
 dependencies {
-
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.6.0'
@@ -66,4 +58,10 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}
+
+def getProps(path) {
+    Properties props = new Properties()
+    props.load(new FileInputStream(file(path)))
+    return props
 }
