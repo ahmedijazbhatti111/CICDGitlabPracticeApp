@@ -1,0 +1,67 @@
+plugins {
+    id 'com.android.application'
+    id 'com.github.triplet.play'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    def signingProps = getProps('signing.properties')
+    compileSdk 32
+    buildToolsVersion '32.1.0-rc1'
+
+    defaultConfig {
+        applicationId "com.example.cicdgitlabpracticeapp"
+        minSdk 21
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+
+            storeFile file(signingProps["KEYSTORE_FILE"])
+            storePassword signingProps["KEYSTORE_PASSWORD"]
+            keyAlias signingProps["KEY_ALIAS"]
+            keyPassword signingProps["KEY_PASSWORD"]
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11.toString()
+    }
+}
+
+play {
+    serviceAccountCredentials = file('pc-api-5901144735381435704-900-e2a645b4efce.json')
+    track = 'alpha'
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.6.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}
+
+def getProps(path) {
+    Properties props = new Properties()
+    props.load(new FileInputStream(file(path)))
+    return props
+}
