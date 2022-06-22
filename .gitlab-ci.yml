@@ -39,7 +39,7 @@ build:
   script:
     - ./gradlew assembleDebug # command to build and debug
   only:
-    - master #for CICD if push or merge in master branch
+    - master #for CICD if push or merge in mastersdsds branch
   artifacts:
     paths:
       - ./app/build/outputs/ # set artifact path which store your APK file
