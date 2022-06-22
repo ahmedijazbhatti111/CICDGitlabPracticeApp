@@ -1,92 +1,274 @@
-# CICDPractice
+# CICDPractice With Gitlab
 
-This project is just for ci cd practice
+In this project I tried to create a pipeline for a sample project where you build and test your CI/CD using Gitlab.
 
-## Getting started
+## Start with creating CI/CD with android
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+open your project build.gradle file and set the classpath dependency in buildscript.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Reference: https://github.com/Triple-T/gradle-play-publisher
 
-## Add your files
+buildscript {
+    dependencies {
+        classpath 'com.github.triplet.gradle:play-publisher:1.1.5'
+    }
+}
+now open app/build.gradle file and add plugin.
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+plugins {
+    id 'com.github.triplet.play'
+}
 
-```
-cd existing_repo
-git remote add origin https://gitlab.com/ahmedijazbhatti1111/cicdpractice.git
-git branch -M main
-git push -uf origin main
-```
+now set signingConfigs in app/build.gradle
 
-## Integrate with your tools
+android {
+......
+    defaultConfig {
+        .....
+    }
 
-- [ ] [Set up project integrations](https://gitlab.com/ahmedijazbhatti1111/cicdpractice/-/settings/integrations)
+    signingConfigs {
+        release {
+   
+            storeFile file("release-keystore.jks") //keystor
+            storePassword "password"
+            keyAlias "alias"
+            keyPassword "password"
+        }
+    }
+...........
+}
+Note: keystore file in the same directory as the app/build.gradle file.
 
-## Collaborate with your team
+now add signingConfigs.release in buildType under release.
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+buildTypes {
+    release {
+        signingConfig signingConfigs.release
+         ........
+    }
+}
+Now your Android Studio Project is ready for “Gradle Play Publisher plugin” .Now we need to set Google Play Console Authentication.
 
-## Test and Deploy
+First we need to setup Google Service Account.
 
-Use the built-in continuous integration in GitLab.
+now open Google Play Console, https://play.google.com/console and create account (if you don’t have account).
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+then select the Setup tab > API access
 
-***
 
-# Editing this README
+click on Create new service account.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+then a pop-up will appear.
 
-## Name
-Choose a self-explaining name for your project.
+now click on Google Cloud Platform.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+This will open a new tab in your browser.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+then click on CREATE SETVICE ACCOUNT
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+then in next screen in service account details section setup service account name and description(optional),
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+then in Grant this service account access to project section select Role: Owner then click continue, then next step is optional .
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+now click on Done.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+now after this we back to previous page and we see there is new service account is created.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+now click on menu of new service account then click on Manage keys option
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
 
-## License
-For open source projects, say how it is licensed.
+then in next screen click on ADD KEY dropdown then click Create new key.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Click on create new Key
+Click on Create new key
+after that a popup will appear, select key type> JSON than click on CREATE
+
+
+After that you see a json file of your key will be download in your pc, then save this json file for future use.
+
+then back to your Google Play Console where you left popup screen,
+
+Click on Done for creating new service account.
+
+
+After that you will see there is new service account will be create in Service account secretion.
+
+then click on Grant permissions and give the permission to user.
+
+
+After that the new screen will appear where you can see user details and permissions.
+
+you can check Set access expiry date if you want (optional).
+
+in Account permissions section check Admin(all permission)(optional).
+
+then at the end click on Invite user.
+
+
+
+
+then click on Sent Invitation button in pop up,
+
+Now you can see you service account is appear in users section,
+
+Step 4: Setup Google play api with you project
+New if you remember that we save our key json file in some kind of place,
+
+now copy this json file and paste it in your project>app directory.
+
+After that go to your Android Studio then open app/build.gradle file and add this code,
+
+android {
+.....
+}
+play {
+    serviceAccountCredentials = file('pc-api-5901144735381435704-900-e2a645b4efce.json') // Json file in you app directory
+    track = 'alpha' // set track for playstore  like 'production','beta','alpha'
+}
+
+dependencies {
+.....
+}
+after that click on Sync Now and sync the project .
+
+Reference: https://docs.gitlab.com/ee/ci/yaml/
+
+First we have to create .gitlab-ci.yml inside you project directory,
+
+.gitlab-ci.yml is the basic config file to ensure your Android app compiles and passes unit and functional tests.
+
+you can find .gitlab-ci.yml latest template from here.
+
+https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Android.latest.gitlab-ci.yml
+
+here is my .gitlab-ci.yml
+
+image: openjdk:11-jdk
+
+variables:
+
+  # ANDROID_COMPILE_SDK is the version of Android you're compiling with.
+  # It should match compileSdkVersion.
+  ANDROID_COMPILE_SDK: "32"
+
+  # ANDROID_BUILD_TOOLS is the version of the Android build tools you are using.
+  # It should match buildToolsVersion.
+  ANDROID_BUILD_TOOLS: "32.1.0-rc1"
+
+  # It's what version of the command line tools we're going to download from the official site.
+  # Official Site-> https://developer.android.com/studio/index.html
+  # There, look down below at the cli tools only, sdk tools package is of format:
+  #        commandlinetools-os_type-ANDROID_SDK_TOOLS_latest.zip
+  # when the script was last modified for latest compileSdkVersion, it was which is written down below
+  ANDROID_SDK_TOOLS: "7583922"
+
+# Packages installation before running script
+before_script:
+  - apt-get --quiet update --yes
+  - apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
+
+  # Setup path as ANDROID_SDK_ROOT for moving/exporting the downloaded sdk into it
+  - export ANDROID_SDK_ROOT="${PWD}/android-home"
+  # Create a new directory at specified location
+  - install -d $ANDROID_SDK_ROOT
+  # Here we are installing androidSDK tools from official source,
+  # (the key thing here is the url from where you are downloading these sdk tool for command line, so please do note this url pattern there and here as well)
+  # after that unzipping those tools and
+  # then running a series of SDK manager commands to install necessary android SDK packages that'll allow the app to build
+  - wget --output-document=$ANDROID_SDK_ROOT/cmdline-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_TOOLS}_latest.zip
+  # move to the archive at ANDROID_SDK_ROOT
+  - pushd $ANDROID_SDK_ROOT
+  - unzip -d cmdline-tools cmdline-tools.zip
+  - pushd cmdline-tools
+  # since commandline tools version 7583922 the root folder is named "cmdline-tools" so we rename it if necessary
+  - mv cmdline-tools tools || true
+  - popd
+  - popd
+  - export PATH=$PATH:${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin/
+
+  # Nothing fancy here, just checking sdkManager version
+  - sdkmanager --version
+
+  # use yes to accept all licenses
+  - yes | sdkmanager --licenses || true
+  - sdkmanager "platforms;android-${ANDROID_COMPILE_SDK}"
+  - sdkmanager "platform-tools"
+  - sdkmanager "build-tools;${ANDROID_BUILD_TOOLS}"
+
+  # Not necessary, but just for surity
+  - chmod +x ./gradlew
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  script:
+    - ./gradlew assembleDebug # command to build and debug
+  only:
+    - main #set trigger for CICD if push or merge in master branch
+  artifacts:
+    paths:
+      - ./app/build/outputs/ # set artifact path which store your APK file
+
+unitTests:
+  stage: test
+  script:
+    - ./gradlew test
+you can use this file for testing (optional).
+
+To understand the important part of this .gitbal-ci.yml file that dynamically creates files from the CI/CD Variable, you must read reference mention below.
+
+Reference: https://about.gitlab.com/blog/2018/10/24/setting-up-gitlab-ci-for-android-projects/
+
+As you see I have define two stages in my .gitbal-ci.yml build and test stage,
+
+For in our build stage we simply build and debug our app, after build stage is passed then our test stage is going to be running and then after passing test stage we can simply check out apk.
+
+Lets implement this,
+
+First configure project to GitLab repository and then commit changes into your master branch(mention in yml file) that you made in your project and push into master branch in GitLab repository.
+
+After project is successfully pushed to GitLab than go to Gitlab and click on project>CI/CD>Pipelines
+
+
+in next screen if you see this type of issue you need to Validate your account or create your own runner and use with this project.
+
+
+I personally go with validate my account because its simple, after validation you just need to unable your shared runner,
+
+simply go to Gitlab Project>Settings>CI/CD>Runners then Expand and enable shared runner,
+
+
+otherwise you can create your own runner its simple I mention the link blow
+
+Install GitLab Runner | GitLab
+
+If you not see this issue then you will see your pipeline is running,
+
+if you remember we have define two stages in .gitbal-ci.yml build and test
+
+this is your build stage is running
+
+
+after completion of build stage then test stage is going to be running
+
+now test stage is running
+
+
+now after completion and pass both build and test stages and branch can be Merged then you are finally ready and this is your success.
+
+
+Photo by krakenimages on Unsplash
+Here we can download the apk file from the Artifacts.
+
+click on menu>build:archive
+
+
+Now finally CI/CD is complete.👏
